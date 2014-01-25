@@ -12,5 +12,40 @@
  */
 
 return array(
-    // ...
+    'logger' => array(
+        'writers' => array(
+            'stream' => array(
+                'name' => 'stream',
+                'options' => array(
+                    'stream' => './data/logs/application.log',
+                    'filters' => array(
+                        'priority' => array(
+                            'name' => 'priority',
+                            'options' => array(
+                                'priority' => 4 // WARN
+                            )
+                        ),
+                        'suppress' => array(
+                            'name' => 'suppress',
+                            'options' => array(
+                                'suppress' => false
+                            )
+                        )
+                    ),
+                    'formatter' => array(
+                        'name' => 'simple',
+                        'options' => array(
+                            'dateTimeFormat' => 'Y-m-d H:i:s'
+                        )
+                    )
+                )
+            )
+        )
+    ),
+    
+    'phpSettings' => array(
+        'display_errors'  => 0,
+        'display_startup_errors' => 0,
+        'date.timezone' => 'Europe/Warsaw'
+    )
 );

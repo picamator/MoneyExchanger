@@ -21,7 +21,7 @@ class IndexController extends AbstractActionController
         $form = new ConverterForm();
         $form->get('submit')->setValue('Convert to PLN');
         $form->get('convertible')->setLabel('RUB');
-        
+                
         return new ViewModel(array('form' => $form));
     }
     
