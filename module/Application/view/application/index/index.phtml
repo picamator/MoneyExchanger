@@ -1,6 +1,8 @@
-<h1>RUB&rightarrow;PLN Converter</h1>
+<h1>RUB&rightarrow;PLN <?php echo $this->translate('Converter'); ?></h1>
+<div class="error hide"></div>
 <?php 
     $form = $this->form->prepare();
+    $form->setAttribute('action', $this->url('application', array('controller'=>'index', 'action'=>'convert')));
     echo $this->form()->openTag($form);
     echo $this->formCollection($form);
     echo $this->form()->closeTag($form);
