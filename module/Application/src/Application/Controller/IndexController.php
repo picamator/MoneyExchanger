@@ -4,7 +4,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\ViewModel\JsonModel;
+use Zend\View\Model\JsonModel;
 
 use Application\Model\Converter; 
 use Application\Form\ConverterForm; 
@@ -33,9 +33,14 @@ class IndexController extends AbstractActionController
      */
     public function convertAction()
     {
-        $form = new ConverterForm();
+        $form       = new ConverterForm();
+        $response   = array('data' => array(
+            'success'   => true,
+            'msg'       => 'ok',
+            'course'    => array('from' => 'RUB', 'to' => 'PLZ', 'value' => 1.2))
+        );
         
-        $request = $this->getRequest();
+        /*$request = $this->getRequest();
         if ($request->isPost() && $request->isXmlHttpRequest()) {
             $converter = new Converter();
             $form->setInputFilter($converter->getInputFilter());
@@ -46,8 +51,8 @@ class IndexController extends AbstractActionController
             } else {
                 // @todo
             }
-        }
+        }*/
        
-        return new JsonModel();
+        return new JsonModel($response);
     }
 }

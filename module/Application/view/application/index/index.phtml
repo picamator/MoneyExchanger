@@ -7,9 +7,30 @@
     echo $this->formCollection($form);
     echo $this->form()->closeTag($form);
 ?>
-
+<img src = "/img/ajax-loader.gif" width="128" height="15" class="loader hide" />
 <div class="clear"></div>
-<div class="result-converter hide">
+<div class="success hide">
     <span class="result-from"></span> RUB = <strong><span class="result-to"></span> PLN</strong>
 </div>
 <div class="clear"></div>
+
+<?php 
+$failedMsg  = $this->translate("Application server error. Please refresh page to try again.");
+$dataMsg    = $this->translate("Input data is invalid. Please correct your data and try again.");
+$this->inlineScript()->captureStart();
+echo <<<JS
+    /**
+     * Initiate Money Exchange Convert
+     */
+    $( document ).ready(function() {
+       var convertForm = $('.converter form');
+       
+       convertForm.MeConvert({
+            form:           convertForm,
+            success:        { target: '.success'},
+            failed:         { target: '.error', msgErr: '$failedMsg' },
+            data:           { target: '#convertible', msgErr: '$dataMsg' },
+        });
+    });
+JS;
+$this->inlineScript()->captureEnd(); ?>

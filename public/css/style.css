@@ -62,7 +62,7 @@ body {
     float: right;
 }
 
-.result-converter {
+.success {
     float: right;
     margin-top: 10px;
     padding: 5px 10px;
@@ -82,6 +82,10 @@ body {
     background: linear-gradient(to bottom,  #7db9e8 0%,#207cca 0%,#ffe7d4 0%,#ffc18c 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', endColorstr='#ffc18c',GradientType=0 ); /* IE6-9 */
     /*---*/
+}
+
+.loader {
+    margin-top: 5px;
 }
 
 /*Error*/

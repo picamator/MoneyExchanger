@@ -23,6 +23,7 @@ class ConverterForm extends Form
             'name' => 'convertible',
             'attributes' => array(
                 'type'  => 'text',
+                'id'    => 'convertible'
             )
         ));
              

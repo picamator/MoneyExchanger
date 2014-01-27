@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MoneyExchanger\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-26 14:57+0300\n"
-"PO-Revision-Date: 2014-01-26 14:57+0300\n"
+"POT-Creation-Date: 2014-01-26 22:12+0300\n"
+"PO-Revision-Date: 2014-01-26 22:12+0300\n"
 "Last-Translator: Sergii Pryz\n"
 "Language-Team: Sergii Pryz\n"
 "Language: \n"
@@ -27,6 +27,14 @@ msgstr ""
 
 #: module/Application/view/application/index/index.phtml:1
 msgid "Converter"
+msgstr ""
+
+#: module/Application/view/application/index/index.phtml:18
+msgid "Application server error. Please refresh page to try again."
+msgstr ""
+
+#: module/Application/view/application/index/index.phtml:19
+msgid "Input data is invalid. Please correct your data and try again."
 msgstr ""
 
 #: module/Application/view/layout/layout.phtml:6
