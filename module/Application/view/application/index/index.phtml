@@ -1,5 +1,5 @@
 <h1>RUB&rightarrow;PLN <?php echo $this->translate('Converter'); ?></h1>
-<div class="error hide"></div>
+<div class="error hide">&nbsp;</div>
 <?php 
     $form = $this->form->prepare();
     $form->setAttribute('action', $this->url('application', array('controller'=>'index', 'action'=>'convert')));
@@ -23,14 +23,13 @@ echo <<<JS
      * Initiate Money Exchange Convert
      */
     $( document ).ready(function() {
-       var convertForm = $('.converter form');
-       
-       convertForm.MeConvert({
-            form:           convertForm,
+       var convertForm = $('.converter form').MeConvert({
             success:        { target: '.success'},
             failed:         { target: '.error', msgErr: '$failedMsg' },
             data:           { target: '#convertible', msgErr: '$dataMsg' },
+            cache:          true
         });
     });
 JS;
-$this->inlineScript()->captureEnd(); ?>
+$this->inlineScript()->captureEnd(); 
+?>

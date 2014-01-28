@@ -17,31 +17,49 @@
          * Currency course
          * It is used only when option.cache = true
          * 
-         * @todo implement cache option
          * @property {Object}
          */
-        course: { from: '', to: '', course: 0 },
-                
+        courseCache: undefined,
+        
+        /**
+         * Converable input field
+         * 
+         * @propery {Object}
+         */
+        dataDom: undefined, 
+        
+        /**
+         * Success DOM element
+         * 
+         * @propery {Object}
+         */
+        successDom: undefined,
+        
+        /**
+         * Failed DOM element
+         * 
+         * @propery {Object}
+         */
+        failedDom: undefined,
+        
         /**
          * Initiate plugin with options 
          * 
          * @todo implement cache option
          * @param {Object}  options
-         * @param {Object}  options.form                 QueryDom
          * @param {Object}  options.success              Success reponce options 
          * @param {String}  options.success.target       Result target 
          * @param {String}  options.failed.target        Failed target  
          * @param {String}  options.failed.msgErr        General failed message
          * @param {String}  options.data.target          Target to currency amount field  
          * @param {String}  options.data.msgErr          Validation error message
-         * @param {String}  options.targetLoader         Target to wite loader
+         * @param {String}  options.targetLoader         Target to waite loader
          * @param {Boolean} options.cache                Turn on/off currency course cache
          * @return {Object}
          */
         init: function(options) {       
             var _this 	= methods;      
             var options = $.extend({
-                form:           null,
                 success:        { target: ''},
                 failed:         { target: '', msgErr: '' },
                 data:           { target: '', msgErr: '' },
@@ -49,8 +67,21 @@
                 cache:          false
             }, options);
 
-            _this.options = options;
+            _this.options       = options;
+            _this.options.form  = this;
+            
+            // add listener to submit event
             _this.initSubmit();
+            
+            // save convertable DOM 
+            _this.dataDom = $(_this.options.data.target);
+            _this.dataDom.focus();
+            
+            // save success DOM
+            _this.successDom = $(_this.options.success.target);
+            
+            // save failed DOM
+            _this.failedDom = $(_this.options.failed.target);
             
             return _this; 
         },
@@ -62,15 +93,15 @@
         initSubmit: function() {
             var _this = methods; 
             
-            _this.options.form.submit(function() {              
+            _this.options.form.submit(function(event) {              
                // validate and send request 
                if (_this.isValid() === true) {
                    _this.ajax();
                } else {
-                   _this.showMsg(_this.options.failed.target, _this.options.data.msgErr);
+                   _this.showError(_this.options.data.msgErr);
                }
                 
-               return false; 
+               event.preventDefault(); 
             });
         },
         
@@ -81,7 +112,7 @@
          */
         isValid: function() {
             var _this   = methods,
-                data    = $(_this.options.data.target).val().trim();
+                data    = _this.dataDom.val().trim();
             
            if ($.isNumeric(data) === false || data <= 0) {
                return false;
@@ -94,27 +125,39 @@
          * Sent request and handler response from Server
          */        
         ajax: function() {
-             var _this  = methods,
-                submitBtn = $('input[type=submit]', _this.options.form);
-        
-             $.ajax({
+            var _this = methods,
+                submitBtn;
+            
+            // retrieve data from cache
+            if (_this.options.cache === true && typeof(_this.courseCache) !== "undefined") {
+                _this.showResult(_this.courseCache);
+                return;
+            }
+            
+            submitBtn  = $('input[type=submit]', _this.options.form);
+            
+            // send request to server and handle reponse
+            $.ajax({
 	            type:       "POST",
 	            url:        _this.options.form.attr('action'), 
                 dataType:   "json",
 	            data:       _this.options.form.serialize(),
 	            
 	            success: function(resp) {
-	            	if (typeof(resp.success) !== undefined &&  resp.success === true) {
+	            	if (typeof(resp.success) !== "undefined" &&  resp.success === true) {
+                        // update cache
+                        _this.courseCache = resp.course; 
+                        // show result
                         _this.showResult(resp.course);
                     } else {
-                        _this.showMsg(_this.options.failed.target, resp.msg);
+                        _this.showError(resp.msg);
                     }
 	            },
 	            
 	            error: function (jqXHR, textStatus, errorThrown) {	  	       	
                      var resp = jQuery.parseJSON(jqXHR.responseText);
-                     if (typeof(resp.msg) !== undefined) {
-                        _this.showMsg(_this.options.failed.target, resp.msg);
+                     if (typeof(resp.msg) !== "undefined") {
+                        _this.showError(resp.msg);
                      }
 	            },
                         
@@ -140,14 +183,13 @@
         * Show Messages in the Target container
         * 
         * @param {String} target
-        * @param {String} msg
+        * @param {Object} domObj
         */ 
-       showMsg: function (target, msg) {
-           var _this 	= methods; 
+       showMsg: function (domObj, msg) {
+           var _this = methods; 
            
-           target = $(target);
-           target.html(msg);
-           target.removeClass(_this.hideClass);
+           domObj.html(msg);
+           domObj.removeClass(_this.hideClass);
        },
                       
        /**
@@ -159,16 +201,34 @@
         * @param {Float}  data.value    Currency course
         */
        showResult: function (data) {
-           //<span class="result-from"></span> RUB = <strong><span class="result-to"></span> PLN</strong>
-           var _this    = methods,
-               fromVal  = $(_this.options.data.target).val(),    
+           var _this    = methods, 
+               fromVal  = _this.dataDom.val(),    
                result   = (fromVal*data.value).toFixed(2);
-       
-            _this.showMsg(
-                _this.options.success.target,
+               
+           // hide previous error
+           _this.failedDom.addClass(_this.hideClass);
+          
+           // show success message
+           _this.showMsg(
+                _this.successDom,
                 fromVal + " " + data.from + " = <strong>" + result + " " + data.to + "</strong>"
-            ); 
-       }        
+           ); 
+       },
+       
+       /**
+        * Show error message
+        * 
+        * @param {string} msg
+        */
+       showError: function (msg) {
+            var _this = methods;
+           
+           // hide previous result
+           $(_this.options.success.target).addClass(_this.hideClass); 
+           // show message
+           _this.showMsg(_this.failedDom, msg);
+       }
+               
     };
 
     $.fn.MeConvert = function(method) {
@@ -183,4 +243,4 @@
         } 
     };
     
-})((jQuery))
+})((jQuery));
