@@ -35,6 +35,7 @@ class Module
         }
         
         // add event listeners for handling Exceptions
+        // @link Rob Allen: http://akrabat.com/zend-framework-2/simple-logging-of-zf2-exceptions/
         $eventManager->attach('dispatch.error', function ($event) use ($services) {
             $exception = $event->getResult()->exception;            
             if (!$exception) {
@@ -46,7 +47,7 @@ class Module
         
         // add error handler
         $logger = $services->get('ZendLog');
-        Logger::registerErrorHandler($logger);
+        Logger::registerErrorHandler($logger);                        
     }
 
     public function getConfig()
@@ -74,7 +75,7 @@ class Module
             )
         );
     }
-    
+       
     public function getServiceConfig()
     {
         return array(

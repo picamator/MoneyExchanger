@@ -139,7 +139,7 @@
             // send request to server and handle reponse
             $.ajax({
 	            type:       "POST",
-	            url:        _this.options.form.attr('action'), 
+	            url:        _this.options.form.attr("action"), 
                 dataType:   "json",
 	            data:       _this.options.form.serialize(),
 	            
@@ -155,10 +155,7 @@
 	            },
 	            
 	            error: function (jqXHR, textStatus, errorThrown) {	  	       	
-                     var resp = jQuery.parseJSON(jqXHR.responseText);
-                     if (typeof(resp.msg) !== "undefined") {
-                        _this.showError(resp.msg);
-                     }
+                    _this.showError(_this.options.failed.msgErr);
 	            },
                         
                 beforeSend: function (jqXHR, settings) {
