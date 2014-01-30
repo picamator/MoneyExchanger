@@ -9,6 +9,8 @@
 
 namespace Application;
 
+use Application\Model\Converter;
+
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Log\Logger;
@@ -75,7 +77,7 @@ class Module
             )
         );
     }
-       
+    
     public function getServiceConfig()
     {
         return array(
@@ -97,6 +99,10 @@ class Module
                                        
                     return new Logger($config['logger']);
                 },
+                'Converter' => function($sm) {
+                    $translator = $sm->get('translator');
+                    return new Converter($translator);
+                }        
             ),
         );
     }

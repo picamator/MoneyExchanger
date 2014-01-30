@@ -33,26 +33,28 @@ class IndexController extends AbstractActionController
      */
     public function convertAction()
     {
-        $form       = new ConverterForm();
-        $response   = array('data' => array(
-            'success'   => true,
-            'msg'       => 'ok',
-            'course'    => array('from' => 'RUB', 'to' => 'PLZ', 'value' => 1.2))
+        $form     = new ConverterForm();
+        $response = array(
+            'success'   => false,
+            'msg'       => ''
         );
         
-        /*$request = $this->getRequest();
+        $request = $this->getRequest();
         if ($request->isPost() && $request->isXmlHttpRequest()) {
-            $converter = new Converter();
+            $converter = $this->getServiceLocator()->get('Converter');
             $form->setInputFilter($converter->getInputFilter());
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
                 // @todo
             } else {
-                // @todo
+                $response = array(
+                    'msg'       => implode($form->getMessages('convertible'), '<br />'),
+                    'success'   => false
+                );
             }
-        }*/
-       
-        return new JsonModel($response);
+        }
+               
+        return new JsonModel(array('data' => $response));
     }
 }

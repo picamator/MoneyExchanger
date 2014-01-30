@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MoneyExchanger\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-26 22:12+0300\n"
-"PO-Revision-Date: 2014-01-26 22:12+0300\n"
+"POT-Creation-Date: 2014-01-31 00:11+0300\n"
+"PO-Revision-Date: 2014-01-31 00:11+0300\n"
 "Last-Translator: Sergii Pryz\n"
 "Language-Team: Sergii Pryz\n"
 "Language: \n"
@@ -23,6 +23,15 @@ msgstr ""
 
 #: module/Application/src/Application/Controller/IndexController.php:23
 msgid "RUB"
+msgstr ""
+
+#: module/Application/src/Application/Model/Converter.php:60
+msgid "Input value is not correct. Please set number and try again."
+msgstr ""
+
+#: module/Application/src/Application/Model/Converter.php:68
+#: module/Application/src/Application/Model/Converter.php:69
+msgid "Value is required and can't be empty."
 msgstr ""
 
 #: module/Application/view/application/index/index.phtml:1
