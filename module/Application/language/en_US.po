@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MoneyExchanger\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-31 00:11+0300\n"
-"PO-Revision-Date: 2014-01-31 00:11+0300\n"
+"POT-Creation-Date: 2014-02-01 20:30+0300\n"
+"PO-Revision-Date: 2014-02-01 20:30+0300\n"
 "Last-Translator: Sergii Pryz\n"
 "Language-Team: Sergii Pryz\n"
 "Language: \n"
@@ -17,20 +17,24 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-SearchPath-0: module/Application\n"
 
-#: module/Application/src/Application/Controller/IndexController.php:22
+#: module/Application/src/Application/Controller/IndexController.php:60
 msgid "Convert to PLN"
 msgstr ""
 
-#: module/Application/src/Application/Controller/IndexController.php:23
+#: module/Application/src/Application/Controller/IndexController.php:61
 msgid "RUB"
 msgstr ""
 
-#: module/Application/src/Application/Model/Converter.php:60
+#: module/Application/src/Application/Controller/IndexController.php:78
+msgid "Resource is avalible for calculator access only."
+msgstr ""
+
+#: module/Application/src/Application/Model/Converter.php:78
 msgid "Input value is not correct. Please set number and try again."
 msgstr ""
 
-#: module/Application/src/Application/Model/Converter.php:68
-#: module/Application/src/Application/Model/Converter.php:69
+#: module/Application/src/Application/Model/Converter.php:86
+#: module/Application/src/Application/Model/Converter.php:87
 msgid "Value is required and can't be empty."
 msgstr ""
 

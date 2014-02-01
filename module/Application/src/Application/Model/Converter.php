@@ -7,9 +7,18 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;       
 use Zend\I18n\Translator\Translator;
 
+/**
+ * Filter Input for converter caclulator
+ */
 class Converter implements InputFilterAwareInterface
 {
     public $convertible;
+    
+    /**
+     * Input FIlter
+     * 
+     * @var InputFilterInterface 
+     */
     protected $inputFilter;           
 
     /**
@@ -37,7 +46,16 @@ class Converter implements InputFilterAwareInterface
     {
         throw new \Exception("Not used");
     }
-
+    
+    /**
+     * Gets Filter Input
+     * Validator d filter configuration for Converter calculator
+     * 
+     * @return InputFilterInterface
+     * @FIXME translate approach of using Poedit does not work for dynamic keys
+     * therefore we have injection for tranlslate here. It is not a brilliant for
+     * large form.
+     */
     public function getInputFilter()
     {
         if (!$this->inputFilter) {

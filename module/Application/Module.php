@@ -17,6 +17,9 @@ use Zend\Log\Logger;
 
 use Application\Service\ErrorHandling as ErrorHandlingService;
 
+use Application\ConverterAwareInterface; 
+use Application\TranslatorAwareInterface;
+
 class Module
 {
     public function onBootstrap(MvcEvent $e)
@@ -98,12 +101,29 @@ class Module
                     }
                                        
                     return new Logger($config['logger']);
-                },
-                'Converter' => function($sm) {
-                    $translator = $sm->get('translator');
-                    return new Converter($translator);
-                }        
+                }      
             ),
+        );
+    }
+    
+    public function getControllerConfig()
+    {
+        return array(
+            'initializers' => array(
+                function ($controllers, $sm) {
+                    $services   = $sm->getServiceLocator();
+                    $translator = $services->get('translator');
+                    // inject converter model
+                    if ($controllers instanceof ConverterAwareInterface) {
+                        $controllers->setConverter(new Converter($translator));
+                    }
+                    
+                    // inject translator
+                    if ($controllers instanceof TranslatorAwareInterface) {
+                        $controllers->setTranslator($translator);
+                    }  
+                }
+            )
         );
     }
 }

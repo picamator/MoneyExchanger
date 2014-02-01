@@ -185,8 +185,10 @@
        showMsg: function (domObj, msg) {
            var _this = methods; 
            
-           domObj.html(msg);
-           domObj.removeClass(_this.hideClass);
+           if(msg !== '') {
+                domObj.html(msg);
+                domObj.removeClass(_this.hideClass);
+           }
        },
                       
        /**
