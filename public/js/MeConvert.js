@@ -55,6 +55,7 @@
          * @param {String}  options.data.msgErr          Validation error message
          * @param {String}  options.targetLoader         Target to waite loader
          * @param {Boolean} options.cache                Turn on/off currency course cache
+         * @param {Integer} options.precision            Precision of result calculation (number of fractiaal digits)
          * @return {Object}
          */
         init: function(options) {       
@@ -64,7 +65,8 @@
                 failed:         { target: '', msgErr: '' },
                 data:           { target: '', msgErr: '' },
                 targetLoader:   '.loader',
-                cache:          false
+                cache:          false,
+                precision:      4
             }, options);
 
             _this.options       = options;
@@ -202,7 +204,7 @@
        showResult: function (data) {
            var _this    = methods, 
                fromVal  = _this.dataDom.val(),    
-               result   = (fromVal*data.value).toFixed(2);
+               result   = (fromVal*data.value).toFixed(_this.options.precision);
                
            // hide previous error
            _this.failedDom.addClass(_this.hideClass);
