@@ -47,5 +47,13 @@ return array(
         'display_errors'  => 0,
         'display_startup_errors' => 0,
         'date.timezone' => 'Europe/Warsaw'
+    ),
+    
+    'yahooClient' => array(
+        'endpoint' => 'http://download.finance.yahoo.com',
+        'convert' => array(
+            'from' => 'RUB',
+            'to'   => 'PLN'
+        )
     )
 );

@@ -13,7 +13,11 @@ use Application\Form\ConverterForm;
 use Application\TranslatorAwareInterface;
 use Zend\I18n\Translator\Translator;
 
-class IndexController extends AbstractActionController implements ConverterAwareInterface, TranslatorAwareInterface
+use Application\YahooClientAwareInterface;
+use Application\Model\Yahoo\FinaceApiClientInterface;
+
+class IndexController extends AbstractActionController implements ConverterAwareInterface, 
+        TranslatorAwareInterface, YahooClientAwareInterface
 {
     /**
      * Converter Model
@@ -28,6 +32,13 @@ class IndexController extends AbstractActionController implements ConverterAware
      * @var \Zend\I18n\Translator\Translator  
      */
     protected $translator;
+    
+    /**
+     * Yahoo! Finance Client
+     * 
+     * @var \Application\Model\Yahoo\FinaceApiClientInterface
+     */
+    protected $yahooClient;
     
     /**
      * Sets Converter Model
@@ -50,6 +61,16 @@ class IndexController extends AbstractActionController implements ConverterAware
     }
     
     /**
+     * Sets Yahoo! Finance API Client
+     * 
+     * @param \Application\Model\Yahoo\FinaceApiClientInterface $yahooClient
+     */
+    public function setYahooClient(FinaceApiClientInterface $yahooClient)
+    {
+        $this->yahooClient = $yahooClient;
+    }
+    
+    /**
      * Display converter form
      * 
      * @return ViewModel
@@ -59,7 +80,7 @@ class IndexController extends AbstractActionController implements ConverterAware
         $form = new ConverterForm();
         $form->get('submit')->setValue('Convert to PLN');
         $form->get('convertible')->setLabel('RUB');
-                
+                        
         return new ViewModel(array('form' => $form));
     }
     
@@ -84,7 +105,16 @@ class IndexController extends AbstractActionController implements ConverterAware
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                // @todo
+                $course = $this->yahooClient->getCourse();
+                
+                $response = array(
+                    'success'   => true,
+                    'course'    => array(
+                        'from'  => $this->yahooClient->getFrom(),
+                        'to'    => $this->yahooClient->getTo(),
+                        'value' => $course
+                    )
+                );
             } else {
                 $response = array(
                     'msg'       => implode($form->getMessages('convertible'), '<br />'),

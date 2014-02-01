@@ -20,6 +20,9 @@ use Application\Service\ErrorHandling as ErrorHandlingService;
 use Application\ConverterAwareInterface; 
 use Application\TranslatorAwareInterface;
 
+use Application\YahooClientAwareInterface;
+use Application\Model\Yahoo\FinaceApiClient;
+
 class Module
 {
     public function onBootstrap(MvcEvent $e)
@@ -97,7 +100,7 @@ class Module
                     $config = $sm->get('Config');
                     if (! isset($config['logger']) ||
                         ! is_array($config['logger'])) {
-                         throw new \RuntimeException();
+                         throw new \RuntimeException('Error: Logger configuration was not found.');
                     }
                                        
                     return new Logger($config['logger']);
@@ -121,7 +124,18 @@ class Module
                     // inject translator
                     if ($controllers instanceof TranslatorAwareInterface) {
                         $controllers->setTranslator($translator);
-                    }  
+                    } 
+                    
+                    // inject Yahoo! Finance Client
+                    if ($controllers instanceof YahooClientAwareInterface) {
+                        $config = $services->get('Config');
+                        if (! isset($config['yahooClient']) ||
+                            ! is_array($config['yahooClient'])) {
+                            throw new \RuntimeException('Error: Yahoo! Finance API configuration was not found.');
+                        }
+                        
+                        $controllers->setYahooClient(new FinaceApiClient($config['yahooClient']));
+                    } 
                 }
             )
         );
