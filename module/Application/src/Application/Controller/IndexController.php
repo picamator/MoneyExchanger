@@ -123,6 +123,6 @@ class IndexController extends AbstractActionController implements ConverterAware
             }
         }
                
-        return new JsonModel(array('data' => $response));
+        return new JsonModel($response);
     }
 }

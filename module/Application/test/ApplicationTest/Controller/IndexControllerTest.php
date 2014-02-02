@@ -42,7 +42,10 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         
         $content = json_decode($this->getResponse()->getContent());
         
-        // check response structure
+        // check response header
+        $this->assertResponseHeaderContains('Content-Type', 'application/json; charset=utf-8');
+        
+        // check response body
         $this->assertEquals($content->success, true);
         $this->assertObjectHasAttribute('course',$content);
         $this->assertObjectHasAttribute('from',$content->course);

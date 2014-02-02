@@ -52,7 +52,7 @@ class Module
             $service = $services->get('ApplicationServiceErrorHandling');
             $service->logException($exception);
         });
-        
+               
         // add error handler
         $logger = $services->get('ZendLog');
         Logger::registerErrorHandler($logger);                        
@@ -137,7 +137,7 @@ class Module
                         $yahooClient->setLogger($services->get('ZendLog'));
                         
                         $controllers->setYahooClient($yahooClient);
-                    } 
+                    }
                 }
             )
         );

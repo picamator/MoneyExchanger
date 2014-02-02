@@ -168,7 +168,7 @@ class FinaceApiClient implements FinaceApiClientInterface
     }
     
     /**
-     * Gets Reponse from Yahoo! Finance API
+     * Gets Response from Yahoo! Finance API
      * 
      * @param string $url
      * @return string
@@ -188,12 +188,12 @@ class FinaceApiClient implements FinaceApiClientInterface
         // get response string
         \curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         
-        // get reponse
+        // get response
         $response = curl_exec($ch);
 
         // handle curl errors
         if(\curl_errno($ch) !== 0) {
-            throw new RuntimeException('Error: Impossible to get reponse from Yahoo! API ['.\curl_error($ch).']');
+            throw new RuntimeException('Error: Impossible to get response from Yahoo! API ['.\curl_error($ch).']');
         }
         
         // close curl
