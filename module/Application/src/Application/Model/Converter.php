@@ -73,7 +73,7 @@ class Converter implements InputFilterAwareInterface
                     array(
                         'name'      => 'Regex',
                         'options'   => array(
-                            'pattern' => '/^[0-9]+\.?[0-9]+$/',
+                            'pattern' => '/^[0-9]*\.?[0-9]*$/',
                             'messages' => array(
                                 \Zend\Validator\Regex::NOT_MATCH => $this->translator->translate('Input value is not correct. Please set number and try again.')
                             )

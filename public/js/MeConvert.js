@@ -203,7 +203,7 @@
         */
        showResult: function (data) {
            var _this    = methods, 
-               fromVal  = _this.dataDom.val(),    
+               fromVal  = Number(_this.dataDom.val()),    
                result   = (fromVal*data.value).toFixed(_this.options.precision);
                
            // hide previous error
