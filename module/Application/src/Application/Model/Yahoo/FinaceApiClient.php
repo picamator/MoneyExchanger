@@ -2,6 +2,7 @@
 namespace Application\Model\Yahoo;
 
 use Application\Model\Yahoo\Exception\RuntimeException;
+use Zend\Log\Logger;
 
 /**
  * Yahoo! Finance API currency convertor client
@@ -37,13 +38,30 @@ class FinaceApiClient implements FinaceApiClientInterface
     protected $to;
     
     /**
+     * Logger
+     * 
+     * @var \Zend\Log\Logger  
+     */
+    protected $logger = null;
+    
+    /**
+     * Curl Options
+     * 
+     * @var array
+     */
+    protected $curlOptions = array(
+        CURLOPT_CONNECTTIMEOUT  => 5, // timeout on connect 
+        CURLOPT_TIMEOUT         => 5 // timeout on response 
+    );
+            
+    /**
      * @param array $config
      * @throws RuntimeException
      */
     public function __construct(array $config) 
     {
         if(!isset($config['endpoint'])) {
-            throw new RuntimeException('Error: configuration faild. Yahoo api endpoint does not set.');
+            throw new RuntimeException('Error: configuration faild. Yahoo! API endpoint does not set.');
         }
         
         // sets From via config
@@ -106,6 +124,32 @@ class FinaceApiClient implements FinaceApiClientInterface
     }
     
     /**
+     * Sets Curl Options
+     * 
+     * @param array $curlOptions
+     * @return self
+     */
+    public function setCurlOptions(array $curlOptions) 
+    {
+        $this->curlOptions = array_merge($this->curlOptions , $curlOptions);
+        
+        return $this;
+    }
+    
+    /**
+     * Sets Logger
+     * 
+     * @param \Zend\Log\Logger $logger
+     * @return self
+     */
+    public function setLogger(Logger $logger)
+    {
+        $this->logger = $logger;
+        
+        return $this;
+    }
+    
+    /**
      * Gets currency course
      * 
      * @return float
@@ -117,7 +161,7 @@ class FinaceApiClient implements FinaceApiClientInterface
         $responseRaw        = $this->getResponse($url);
         $responseParced     = str_getcsv($responseRaw, ',', '"');    
         if(!isset($responseParced[0]) && !is_numeric($responseParced[0])) {
-             throw new RuntimeException('Error: response form Yahoo API ['.$responseRaw.'] contains unsupported format');
+             throw new RuntimeException('Error: response form Yahoo! API ['.$responseRaw.'] contains unsupported format');
         }
         
         return \floatval($responseParced[0]);
@@ -128,6 +172,7 @@ class FinaceApiClient implements FinaceApiClientInterface
      * 
      * @param string $url
      * @return string
+     * @throws RuntimeException
      */
     protected function getResponse($url)
     {
@@ -137,16 +182,25 @@ class FinaceApiClient implements FinaceApiClientInterface
         // set url with resourse
         \curl_setopt($ch, CURLOPT_URL, $url);
 
+        // set configurable curl options
+        \curl_setopt_array($ch, $this->curlOptions);
+        
         // get response string
         \curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        // set timeout
-        \curl_setopt($ch, CURLOPT_TIMEOUT, 2);
         
         // get reponse
         $response = curl_exec($ch);
 
+        // handle curl errors
+        if(\curl_errno($ch) !== 0) {
+            throw new RuntimeException('Error: Impossible to get reponse from Yahoo! API ['.\curl_error($ch).']');
+        }
+        
         // close curl
         \curl_close($ch); 
+        
+        // log response
+        $this->logDebugMsg('Yahoo! API response: '.$response);
         
         return $response;
     }
@@ -161,5 +215,17 @@ class FinaceApiClient implements FinaceApiClientInterface
     protected function getUrl()
     {        
         return $this->config['endpoint'].'/'.sprintf(self::RESOURCE_PATTERN, $this->from, $this->to);
+    }
+    
+    /**
+     * Write message to Logger with Debug priority
+     * 
+     * @param string $msg
+     */
+    protected function logDebugMsg($msg) 
+    {
+        if (!is_null($this->logger)) {
+            $this->logger->debug($msg);
+        }
     }
 }

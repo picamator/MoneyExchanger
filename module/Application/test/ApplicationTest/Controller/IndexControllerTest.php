@@ -28,8 +28,10 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
      * @dataProvider providerConvert
      * @param array $data
      */
-    /*public function testConvertAction(array $data)
+    public function testConvertAction(array $data)
     {
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+ 
         $this->dispatch('/convert', 'POST', $data);
         $this->assertResponseStatusCode(200);
 
@@ -38,7 +40,14 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         $this->assertControllerClass('IndexController');
         $this->assertMatchedRouteName('application');
         
-        $response = json_decode($this->getResponse()->getContent(), true);
+        $content = json_decode($this->getResponse()->getContent());
+        
+        // check response structure
+        $this->assertEquals($content->success, true);
+        $this->assertObjectHasAttribute('course',$content);
+        $this->assertObjectHasAttribute('from',$content->course);
+        $this->assertObjectHasAttribute('to',$content->course);
+        $this->assertObjectHasAttribute('value',$content->course);
     }
     
     public function providerConvert()
@@ -46,5 +55,5 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         return array(
             array(array('convertible' => 125))
         );
-    }*/
+    }
 }

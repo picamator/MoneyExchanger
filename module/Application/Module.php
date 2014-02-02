@@ -133,8 +133,10 @@ class Module
                             ! is_array($config['yahooClient'])) {
                             throw new \RuntimeException('Error: Yahoo! Finance API configuration was not found.');
                         }
+                        $yahooClient = new FinaceApiClient($config['yahooClient']);
+                        $yahooClient->setLogger($services->get('ZendLog'));
                         
-                        $controllers->setYahooClient(new FinaceApiClient($config['yahooClient']));
+                        $controllers->setYahooClient($yahooClient);
                     } 
                 }
             )

@@ -1,5 +1,6 @@
 <?php
 namespace Application\Model\Yahoo;
+use Zend\Log\Logger;
 
 /**
  * Interface for Finance API Client
@@ -42,5 +43,21 @@ interface FinaceApiClientInterface
      * @return float
      */
     public function getCourse();
+    
+    /**
+     * Sets Curl Options
+     * 
+     * @param array $curlOptions
+     * @return self
+     */
+    public function setCurlOptions(array $curlOptions);
+    
+    /**
+     * Sets Logger
+     * 
+     * @param \Zend\Log\Logger $logger
+     * @return self
+     */
+    public function setLogger(Logger $logger);
 }
 
